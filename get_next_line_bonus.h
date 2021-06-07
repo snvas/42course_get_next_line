@@ -1,22 +1,22 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.h                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.h                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 13:41:46 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:36:33 by snovaes          ###   ########.fr       */
+/*   Created: 2021/06/06 14:02:11 by snovaes           #+#    #+#             */
+/*   Updated: 2021/06/06 20:51:49 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#ifndef GET_NEXT_LINE_H
-# define GET_NEXT_LINE_H
+#ifndef GET_NEXT_LINE_BONUS_H
+# define GET_NEXT_LINE_BONUS_H
 
 # include <unistd.h>
 # include <stdlib.h>
 
-# define FD_SIZE 4096
+# define OPEN_MAX 1024
 
 typedef enum e_status
 {

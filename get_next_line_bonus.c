@@ -1,16 +1,16 @@
 /* ************************************************************************** */
 /*                                                                            */
 /*                                                        :::      ::::::::   */
-/*   get_next_line.c                                    :+:      :+:    :+:   */
+/*   get_next_line_bonus.c                              :+:      :+:    :+:   */
 /*                                                    +:+ +:+         +:+     */
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 13:09:36 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:37:38 by snovaes          ###   ########.fr       */
+/*   Created: 2021/06/06 14:01:05 by snovaes           #+#    #+#             */
+/*   Updated: 2021/06/06 20:51:20 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	kill(char **save)
 {
@@ -68,7 +68,7 @@ static t_status	output(char **save, char **line, ssize_t size_read)
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*save;
+	static char	*save[OPEN_MAX];
 	ssize_t		size_read;
 	char		*buffer;
 	char		*temp;
@@ -78,18 +78,18 @@ int	get_next_line(int fd, char **line)
 	while (size_read > 0)
 	{
 		buffer[size_read] = '\0';
-		if (save == NULL)
-			save = ft_strdup(buffer);
+		if (save[fd] == NULL)
+			save[fd] = ft_strdup(buffer);
 		else
 		{
-			temp = ft_strjoin(save, buffer);
-			free(save);
-			save = temp;
+			temp = ft_strjoin(save[fd], buffer);
+			free(save[fd]);
+			save[fd] = temp;
 		}
-		if (ft_strchr(save, '\n'))
+		if (ft_strchr(save[fd], '\n'))
 			break ;
 		size_read = read(fd, buffer, BUFFER_SIZE);
 	}
 	free(buffer);
-	return (output(&save, line, size_read));
+	return (output(&(save[fd]), line, size_read));
 }
