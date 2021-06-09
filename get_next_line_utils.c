@@ -5,60 +5,35 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 13:11:06 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:38:25 by snovaes          ###   ########.fr       */
+/*   Created: 2021/06/05 00:56:35 by snovaes           #+#    #+#             */
+/*   Updated: 2021/06/08 22:23:31 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
+char	*ft_strcpy(char *dst, const char *src)
+{
+	int	i;
+
+	i = 0;
+	while (src[i])
+	{
+		dst[i] = src[i];
+		i++;
+	}
+	dst[i] = '\0';
+	return (dst);
+}
+
 size_t	ft_strlen(const char *str)
 {
-	const char	*end;
+	int	len;
 
-	end = str;
-	while (*end)
-		end++;
-	return (end - str);
-}
-
-char	*ft_strdup(const char *str)
-{
-	char	*ret;
-	size_t	size;
-	size_t	offset;
-
-	size = ft_strlen(str);
-	ret = malloc(size + 1);
-	offset = 0;
-	while (str[offset])
-	{
-		ret[offset] = str[offset];
-		offset++;
-	}
-	ret[offset] = '\0';
-	return (ret);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2)
-{
-	size_t	len;
-	char	*res;
-	size_t	offset;
-
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(len + 1);
-	if (res == NULL)
-		return (NULL);
-	offset = 0;
-	while (*s1)
-		res[offset++] = *s1++;
-	while (*s2)
-		res[offset++] = *s2++;
-	res[offset] = '\0';
-	return (res);
+	len = 0;
+	while (str[len] != '\0')
+		len++;
+	return (len);
 }
 
 char	*ft_strchr(const char *s, int c)
@@ -66,8 +41,6 @@ char	*ft_strchr(const char *s, int c)
 	unsigned char	*s_u;
 	unsigned char	c_u;
 
-	if (s == NULL)
-		return (NULL);
 	s_u = (unsigned char *)s;
 	c_u = (unsigned char)c;
 	if (*s_u == c_u)
@@ -80,20 +53,47 @@ char	*ft_strchr(const char *s, int c)
 	return (NULL);
 }
 
-char	*linedup(char *save, size_t end)
+char	*ft_strdup(const char *src)
 {
-	char	*dup;
-	size_t	offset;
+	char	*ptr;
+	size_t	i;
 
-	dup = malloc(end + 1);
-	if (dup == NULL)
+	i = 0;
+	ptr = (char *)malloc(sizeof(char) * ft_strlen(src) + 1);
+	if (ptr == NULL)
 		return (NULL);
-	offset = 0;
-	while (offset < end)
+	while (src[i])
 	{
-		dup[offset] = save[offset];
-		offset++;
+		ptr[i] = src[i];
+		i++;
 	}
-	dup[offset] = '\0';
-	return (dup);
+	ptr[i] = '\0';
+	return (ptr);
+}
+
+char	*ft_strjoin(char const *s1, char const *s2)
+{
+	int		i;
+	int		j;
+	char	*str;
+
+	i = 0;
+	j = 0;
+	if (!s1 || !s2)
+		return (NULL);
+	str = (char *)malloc(sizeof(char) * (ft_strlen(s1) + ft_strlen(s2) + 1));
+	if (str == NULL)
+		return (NULL);
+	while (s1[i] != '\0')
+	{
+		str[i] = s1[i];
+		i++;
+	}
+	while (s2[j] != '\0')
+	{
+		str[i + j] = s2[j];
+		j++;
+	}
+	str[i + j] = '\0';
+	return (str);
 }

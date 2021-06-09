@@ -5,91 +5,107 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 13:09:36 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:37:38 by snovaes          ###   ########.fr       */
+/*   Created: 2021/06/04 12:44:41 by snovaes           #+#    #+#             */
+/*   Updated: 2021/06/08 22:24:53 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	kill(char **save)
+char	*ft_strnew(size_t size)
 {
-	if (*save != NULL)
-	{
-		free(*save);
-		*save = NULL;
-	}
+	char	*str;
+
+	str = (char *)malloc(sizeof(char) * (size + 1));
+	if (str == NULL)
+		return (NULL);
+	while (size > 0)
+		str[size--] = '\0';
+	str[0] = '\0';
+	return (str);
 }
 
-static int	linelen(char *line)
-{
-	size_t	len;
 
-	len = 0;
-	while (line[len])
+static	char	*check_reminder(char *reminder, char **line)
+{
+	char	*p_n;
+
+	p_n = NULL;
+	if (reminder)
 	{
-		if (line[len] == '\n')
-			break ;
-		len++;
+		p_n = ft_strchr(reminder, '\n');
+		if (p_n)
+		{
+			*p_n = '\0';
+			*line = ft_strdup(reminder);
+			ft_strcpy(reminder, ++p_n);
+		}
+		else
+		{
+			*line = ft_strdup(reminder);
+			while (*reminder)	
+				*reminder++ = '\0';
+		}
 	}
-	return (len);
+	else
+		*line = ft_strnew(1);
+	return (p_n);
 }
 
-static t_status	get_line(char **save, char **line)
+static int	get_line(int fd, char **line, char **reminder)
 {
-	size_t	size;
-	char	*temp;
+	char		buf[BUFFER_SIZE + 1];
+	int			byte_was_read;
+	char		*p_n;
+	char		*tmp;
 
-	size = linelen(*save);
-	if ((*save)[size] == '\0')
+	p_n = check_reminder(*reminder, line);
+	while (!p_n && (byte_was_read))
 	{
-		*line = ft_strdup(*save);
-		kill(save);
-		return (END_OF_FILE);
+		byte_was_read = read(fd, buf, BUFFER_SIZE);
+		buf[byte_was_read] = '\0';
+		if ((p_n = ft_strchr(buf, '\n')))
+		{
+			*p_n = '\0';
+			p_n++;
+			*reminder = ft_strdup(p_n);
+		}
+		tmp = *line;
+		*line = ft_strjoin(*line, buf);
+		if (!(*line) || byte_was_read < 0)
+			return (-1);
+		free(tmp);
 	}
-	*line = linedup(*save, size);
-	temp = ft_strdup((*save) + size + 1);
-	free(*save);
-	*save = temp;
-	return (NEWLINE);
+	return (byte_was_read != 0 || ft_strlen(*line) != 0);
 }
 
-static t_status	output(char **save, char **line, ssize_t size_read)
+GNL	*new_linked_list_el(int fd)
 {
-	if (size_read == -1)
-		return (ERROR);
-	else if (size_read == 0 && *save == NULL)
-	{
-		*line = ft_strdup("");
-		return (END_OF_FILE);
-	}
-	return (get_line(save, line));
+	GNL	*new;
+
+	new = (GNL *)malloc(sizeof(GNL));
+	new->fd = fd;
+	new->reminder = NULL;
+	new->next = NULL;
+	return (new);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*save;
-	ssize_t		size_read;
-	char		*buffer;
-	char		*temp;
+	static GNL	*head;
+	GNL			*tmp;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	size_read = read(fd, buffer, BUFFER_SIZE);
-	while (size_read > 0)
+	if (fd < 0 || line == NULL)
+		return (-1);
+	if (head == NULL)
+		head = new_linked_list_el(fd);
+	tmp = head;
+	while (tmp->fd != fd)
 	{
-		buffer[size_read] = '\0';
-		if (save == NULL)
-			save = ft_strdup(buffer);
-		else
-		{
-			temp = ft_strjoin(save, buffer);
-			free(save);
-			save = temp;
-		}
-		if (ft_strchr(save, '\n'))
-			break ;
-		size_read = read(fd, buffer, BUFFER_SIZE);
+		if (tmp->next == NULL)
+			tmp->next = new_linked_list_el(fd);
+		tmp = tmp->next;
 	}
-	free(buffer);
-	return (output(&save, line, size_read));
+	return (get_line(tmp->fd, line, &tmp->reminder));
 }
+
