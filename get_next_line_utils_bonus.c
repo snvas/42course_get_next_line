@@ -6,7 +6,7 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:36 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:52:24 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/08 21:58:03 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -38,6 +38,24 @@ char	*ft_strdup(const char *str)
 	}
 	ret[offset] = '\0';
 	return (ret);
+}
+
+char	*linedup(char *save, size_t end)
+{
+	char	*dup;
+	size_t	offset;
+
+	dup = malloc(end + 1);
+	if (dup == NULL)
+		return (NULL);
+	offset = 0;
+	while (offset < end)
+	{
+		dup[offset] = save[offset];
+		offset++;
+	}
+	dup[offset] = '\0';
+	return (dup);
 }
 
 char	*ft_strjoin(const char *s1, const char *s2)
@@ -78,22 +96,4 @@ char	*ft_strchr(const char *s, int c)
 			return ((char *)s_u);
 	}
 	return (NULL);
-}
-
-char	*linedup(char *save, size_t end)
-{
-	char	*dup;
-	size_t	offset;
-
-	dup = malloc(end + 1);
-	if (dup == NULL)
-		return (NULL);
-	offset = 0;
-	while (offset < end)
-	{
-		dup[offset] = save[offset];
-		offset++;
-	}
-	dup[offset] = '\0';
-	return (dup);
 }
