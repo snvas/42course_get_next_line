@@ -6,90 +6,95 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:09:36 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/08 13:35:30 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/10 17:30:42 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
 #include "get_next_line.h"
 
-static void	kill(char **save)
+char	*ft_substr(char *s, unsigned int start, size_t len)
 {
-	if (*save != NULL)
-	{
-		free(*save);
-		*save = NULL;
-	}
+	char	*subs;
+	size_t	sizestr;
+
+	if (!s)
+		return (0);
+	sizestr = ft_strlen(s) + 1;
+	if (start > sizestr)
+		return (ft_strdup(""));
+	subs = (char *)malloc(sizeof(char) * (len + 1));
+	if (!subs)
+		return (0);
+	str_copy(subs, (s + start), len + 1);
+	subs[len] = '\0';
+	return (subs);
 }
 
-static int	linelen(char *line)
+char	*new_line(char *temp, char **line, int n)
 {
-	size_t	len;
+	char	*extra;
+	int		i;
 
-	len = 0;
-	while (line[len])
+	extra = NULL;
+	i = 0;
+	while ((*(temp + i) != '\n') && (*(temp + i) != '\0'))
+		i++;
+	if (temp[i] == '\n')
 	{
-		if (line[len] == '\n')
-			break ;
-		len++;
+		*line = ft_substr(temp, 0, i);
+		extra = ft_strdup(&((temp)[i + 1]));
+		free(temp);
 	}
-	return (len);
+	else
+	{
+		*line = ft_strdup(temp);
+		free(temp);
+	}
+	if (n != 0)
+		if (!extra)
+			return (NULL);
+	return (extra);
 }
 
-static t_status	get_line(char **save, char **line)
+int	do_read(int fd, char *buffer, char **temp, int *n)
 {
-	size_t	size;
-	char	*temp;
+	char	*othertemp;
 
-	size = linelen(*save);
-	if ((*save)[size] == '\0')
+	while (*n && (!(ft_strchr(*temp, '\n'))))
 	{
-		*line = ft_strdup(*save);
-		kill(save);
-		return (END_OF_FILE);
+		*n = read(fd, buffer, BUFFER_SIZE);
+		if (*n < 0 || *n > BUFFER_SIZE)
+		{
+			free(buffer);
+			return (0);
+		}
+		*(buffer + *n) = '\0';
+		othertemp = ft_strjoin(*temp, buffer);
+		free(*temp);
+		*temp = othertemp;
 	}
-	*line = linedup(*save, size);
-	temp = ft_strdup((*save) + size + 1);
-	free(*save);
-	*save = temp;
-	return (NEWLINE);
-}
-
-static t_status	output(char **save, char **line, ssize_t size_read)
-{
-	if (size_read == -1)
-		return (ERROR);
-	else if (size_read == 0 && *save == NULL)
-	{
-		*line = ft_strdup("");
-		return (END_OF_FILE);
-	}
-	return (get_line(save, line));
+	free(buffer);
+	return (1);
 }
 
 int	get_next_line(int fd, char **line)
 {
-	static char	*save;
-	ssize_t		size_read;
 	char		*buffer;
-	char		*temp;
+	int			n;
+	static char	*temp;
 
-	buffer = malloc(BUFFER_SIZE + 1);
-	size_read = read(fd, buffer, BUFFER_SIZE);
-	while (size_read > 0)
-	{
-		buffer[size_read] = '\0';
-		if (save == NULL)
-			save = ft_strdup(buffer);
-		else
-		{
-			temp = ft_strjoin(save, buffer);
-			free(save);
-			save = temp;
-		}
-		if (ft_strchr(save, '\n'))
-			break ;
-		size_read = read(fd, buffer, BUFFER_SIZE);
-	}
-	free(buffer);
-	return (output(&save, line, size_read));
+	n = 1;
+	if (fd < 0 || !line || BUFFER_SIZE <= 0 || fd > RLIMIT_NOFILE)
+		return (-1);
+	if (!temp)
+		temp = ft_strdup("");
+	buffer = (char *)malloc((BUFFER_SIZE + 1) * sizeof(char));
+	if (!buffer)
+		return (-1);
+	if (!(do_read(fd, buffer, &temp, &n)))
+		return (-1);
+	temp = new_line(temp, line, n);
+	if (!n)
+		return (0);
+	return (1);
 }

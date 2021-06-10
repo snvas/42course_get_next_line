@@ -6,94 +6,76 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 14:01:36 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/08 21:58:03 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/10 17:33:53 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
-size_t	ft_strlen(const char *str)
-{
-	const char	*end;
-
-	end = str;
-	while (*end)
-		end++;
-	return (end - str);
-}
-
-char	*ft_strdup(const char *str)
-{
-	char	*ret;
-	size_t	size;
-	size_t	offset;
-
-	size = ft_strlen(str);
-	ret = malloc(size + 1);
-	offset = 0;
-	while (str[offset])
-	{
-		ret[offset] = str[offset];
-		offset++;
-	}
-	ret[offset] = '\0';
-	return (ret);
-}
-
-char	*linedup(char *save, size_t end)
-{
-	char	*dup;
-	size_t	offset;
-
-	dup = malloc(end + 1);
-	if (dup == NULL)
-		return (NULL);
-	offset = 0;
-	while (offset < end)
-	{
-		dup[offset] = save[offset];
-		offset++;
-	}
-	dup[offset] = '\0';
-	return (dup);
-}
-
-char	*ft_strjoin(const char *s1, const char *s2)
+size_t	ft_strlen(const char *s)
 {
 	size_t	len;
-	char	*res;
-	size_t	offset;
 
-	if (s1 == NULL || s2 == NULL)
-		return (NULL);
-	len = ft_strlen(s1) + ft_strlen(s2);
-	res = malloc(len + 1);
-	if (res == NULL)
-		return (NULL);
-	offset = 0;
-	while (*s1)
-		res[offset++] = *s1++;
-	while (*s2)
-		res[offset++] = *s2++;
-	res[offset] = '\0';
-	return (res);
+	len = 0;
+	if (!s)
+		return (len);
+	while (s[len] != 0)
+		len++;
+	return (len);
 }
 
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned char	*s_u;
-	unsigned char	c_u;
+	size_t	i;
 
-	if (s == NULL)
+	i = 0;
+	while ((s[i] != '\0') && ((char)c != s[i]))
+		i++;
+	if ((char)c == s[i])
+		return ((char *)s + i);
+	else
+		return (0);
+}
+
+char	*ft_strdup(char *s)
+{
+	char	*temp;
+
+	temp = malloc((ft_strlen(s) + 1) * sizeof(char));
+	if (!temp)
 		return (NULL);
-	s_u = (unsigned char *)s;
-	c_u = (unsigned char)c;
-	if (*s_u == c_u)
-		return ((char *)s_u);
-	while (*s_u++)
+	str_copy(temp, s, ft_strlen(s) + 1);
+	return (temp);
+}
+
+char	*ft_strjoin(char *s1, char *s2)
+{
+	char	*temp;
+
+	if (!s1 && !s2)
+		return (NULL);
+	temp = malloc((ft_strlen(s1) + ft_strlen(s2) + 1) * sizeof(char));
+	if (!temp)
+		return (NULL);
+	str_copy(temp, s1, (ft_strlen(s1) + 1));
+	str_copy((temp + ft_strlen(s1)), s2, (ft_strlen(s2) + 1));
+	return (temp);
+}
+
+size_t	str_copy(char *dst, char *src, size_t size)
+{
+	size_t	i;
+
+	i = 0;
+	if (!(src))
+		return (0);
+	if (size == 0)
+		return (ft_strlen(src));
+	while (*(src + i) != '\0' && i < size - 1)
 	{
-		if (*s_u == c_u)
-			return ((char *)s_u);
+		*(dst + i) = *(src + i);
+		i++;
 	}
-	return (NULL);
+	*(dst + i) = '\0';
+	return (ft_strlen(src));
 }
