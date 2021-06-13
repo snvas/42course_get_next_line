@@ -6,11 +6,11 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/13 14:32:22 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/13 14:52:32 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/13 15:08:41 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
-#include "get_next_line.h"
+#include "get_next_line_bonus.h"
 
 static void	kill(char **reminder)
 {
