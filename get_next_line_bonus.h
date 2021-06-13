@@ -5,8 +5,8 @@
 /*                                                    +:+ +:+         +:+     */
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
-/*   Created: 2021/06/06 14:02:11 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/06 20:51:49 by snovaes          ###   ########.fr       */
+/*   Created: 2021/06/13 14:35:58 by snovaes           #+#    #+#             */
+/*   Updated: 2021/06/13 14:36:24 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -17,13 +17,6 @@
 # include <stdlib.h>
 
 # define OPEN_MAX 1024
-
-typedef enum e_status
-{
-	ERROR = -1,
-	END_OF_FILE,
-	NEWLINE,
-}	t_status;
 
 int		get_next_line(int fd, char **line);
 
