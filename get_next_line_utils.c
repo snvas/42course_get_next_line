@@ -6,7 +6,7 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:11:06 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/10 22:31:53 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/13 16:02:21 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_strdup(const char *str)
 	return (ret);
 }
 
-char	*linedup(char *save, size_t end)
+char	*ft_strndup(char *save, size_t end)
 {
 	char	*dup;
 	size_t	offset;

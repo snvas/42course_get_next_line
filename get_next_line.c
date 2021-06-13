@@ -6,7 +6,7 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/10 21:28:23 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/10 22:31:43 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/13 16:02:41 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -47,7 +47,7 @@ static int	get_line(char **reminder, char **line)
 		kill(reminder);
 		return (0);
 	}
-	*line = linedup(*reminder, size);
+	*line = ft_strndup(*reminder, size);
 	temp = ft_strdup((*reminder) + size + 1);
 	free(*reminder);
 	*reminder = temp;
