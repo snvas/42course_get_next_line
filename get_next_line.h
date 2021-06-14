@@ -6,7 +6,7 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:41:46 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/13 16:08:40 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/13 18:54:37 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -23,6 +23,6 @@ size_t	ft_strlen(const char *str);
 char	*ft_strdup(const char *str);
 char	*ft_strjoin(const char *s1, const char *s2);
 char	*ft_strchr(const char *s, int c);
-char	*ft_strndup(char *save, size_t end);
+char	*ft_strndup(char *reminder, size_t end);
 
 #endif

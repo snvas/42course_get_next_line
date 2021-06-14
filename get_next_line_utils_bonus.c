@@ -6,7 +6,7 @@
 /*   By: snovaes <snovaes@student.42sp.org.br>      +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2021/06/06 13:11:06 by snovaes           #+#    #+#             */
-/*   Updated: 2021/06/13 16:03:54 by snovaes          ###   ########.fr       */
+/*   Updated: 2021/06/13 19:14:36 by snovaes          ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -40,7 +40,7 @@ char	*ft_strdup(const char *str)
 	return (ret);
 }
 
-char	*ft_strndup(char *save, size_t end)
+char	*ft_strndup(char *reminder, size_t end)
 {
 	char	*dup;
 	size_t	offset;
@@ -51,7 +51,7 @@ char	*ft_strndup(char *save, size_t end)
 	offset = 0;
 	while (offset < end)
 	{
-		dup[offset] = save[offset];
+		dup[offset] = reminder[offset];
 		offset++;
 	}
 	dup[offset] = '\0';
@@ -81,19 +81,19 @@ char	*ft_strjoin(const char *s1, const char *s2)
 
 char	*ft_strchr(const char *s, int c)
 {
-	unsigned char	*s_u;
-	unsigned char	c_u;
+	unsigned char	*str;
+	unsigned char	to_find;
 
 	if (s == NULL)
 		return (NULL);
-	s_u = (unsigned char *)s;
-	c_u = (unsigned char)c;
-	if (*s_u == c_u)
-		return ((char *)s_u);
-	while (*s_u++)
+	str = (unsigned char *)s;
+	to_find = (unsigned char)c;
+	if (*str == to_find)
+		return ((char *)str);
+	while (*str++)
 	{
-		if (*s_u == c_u)
-			return ((char *)s_u);
+		if (*str == to_find)
+			return ((char *)str);
 	}
 	return (NULL);
 }
